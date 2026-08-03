@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 import { Header } from "@/components/layout/header";
@@ -15,39 +16,11 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
 
   title: {
-    default: "FiberStack | Ferramentas para empreendedores",
+    default: "FiberStack — Tecnologia e soluções digitais",
     template: "%s | FiberStack",
   },
 
-  description:
-    "Compare maquininhas, calcule taxas, descubra ferramentas para empresas e acompanhe conteúdos exclusivos sobre empreendedorismo.",
-
-  keywords: [
-    "FiberStack",
-    "maquininha",
-    "maquineta",
-    "Ton",
-    "Mercado Pago",
-    "Stone",
-    "PagBank",
-    "InfinitePay",
-    "comparador de maquininhas",
-    "calculadora de taxas",
-    "empreendedor",
-    "MEI",
-    "vendas",
-    "pagamentos",
-  ],
-
-  authors: [
-    {
-      name: "FiberStack",
-      url: siteConfig.url,
-    },
-  ],
-
-  creator: "FiberStack",
-  publisher: "FiberStack",
+  description: siteConfig.description,
 
   verification: {
     google: "9H-FPpasXm9AI6-n_2jTxANiTCoMM_-An8qoq70VJcg",
@@ -56,50 +29,14 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      "max-video-preview": -1,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-    },
-  },
-
-  alternates: {
-    canonical: siteConfig.url,
   },
 
   openGraph: {
     type: "website",
     locale: "pt_BR",
-    url: siteConfig.url,
-    siteName: "FiberStack",
-    title: "FiberStack | Ferramentas para empreendedores",
-    description:
-      "Compare maquininhas, calcule taxas e encontre as melhores soluções para seu negócio.",
-
-    images: [
-      {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
-        alt: "FiberStack",
-      },
-    ],
-  },
-
-  twitter: {
-    card: "summary_large_image",
-    title: "FiberStack | Ferramentas para empreendedores",
-    description:
-      "Compare maquininhas, calcule taxas e descubra ferramentas para o seu negócio.",
-    images: ["/og-image.jpg"],
-  },
-
-  icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
-    apple: "/apple-touch-icon.png",
+    siteName: siteConfig.name,
+    title: siteConfig.name,
+    description: siteConfig.description,
   },
 };
 
@@ -112,8 +49,38 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body className={`${geist.variable} antialiased`}>
         <Header />
+
         <main>{children}</main>
+
         <Footer />
+
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-V0BVYRY68N"
+          strategy="afterInteractive"
+        />
+
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-V0BVYRY68N');
+          `}
+        </Script>
+
+        {/* Microsoft Clarity */}
+        <Script id="microsoft-clarity" strategy="afterInteractive">
+          {`
+            (function(c,l,a,r,i,t,y){
+              c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+              t=l.createElement(r);t.async=1;
+              t.src="https://www.clarity.ms/tag/"+i;
+              y=l.getElementsByTagName(r)[0];
+              y.parentNode.insertBefore(t,y);
+            })(window, document, "clarity", "script", "xwp4li02f6");
+          `}
+        </Script>
       </body>
     </html>
   );
