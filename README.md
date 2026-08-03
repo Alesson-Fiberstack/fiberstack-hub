@@ -1,4 +1,4 @@
-# FiberStack Hub v0.1
+# FiberStack Hub v0.2
 
 Plataforma inicial da FiberStack Soluções com homepage, comparador de maquininhas, calculadora de taxas, central de ferramentas e páginas institucionais.
 
@@ -28,3 +28,8 @@ npm start
 ## Observação
 
 Antes de divulgar, atualize `siteConfig.url` após a Vercel fornecer a URL definitiva. As taxas e condições comerciais devem ser confirmadas nos sites oficiais.
+
+
+## v0.2
+- Página de oferta da Ton em `/ton`
+- Comparador direcionando para a página da Ton
