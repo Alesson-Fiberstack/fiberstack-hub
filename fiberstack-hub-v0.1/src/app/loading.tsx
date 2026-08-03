@@ -1,1 +1,0 @@
-export default function Loading() { return <div className="grid min-h-[50vh] place-items-center"><div className="size-10 animate-spin rounded-full border-4 border-zinc-200 border-t-emerald-500" aria-label="Carregando" /></div>; }

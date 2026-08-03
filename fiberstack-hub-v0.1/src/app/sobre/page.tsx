@@ -1,2 +1,0 @@
-import { Container } from "@/components/layout/container";
-export default function SobrePage() { return <section className="py-16"><Container className="max-w-4xl"><h1 className="text-4xl font-bold sm:text-5xl">Sobre a FiberStack</h1><p className="mt-6 text-lg leading-8 text-zinc-600">A FiberStack Soluções desenvolve ferramentas, comparativos e conteúdos digitais voltados a pequenos empreendedores. Nosso objetivo é transformar tecnologia em decisões mais simples e resultados práticos.</p></Container></section>; }

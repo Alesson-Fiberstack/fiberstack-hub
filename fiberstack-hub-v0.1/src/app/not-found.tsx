@@ -1,2 +1,0 @@
-import { ButtonLink } from "@/components/ui/button";
-export default function NotFound() { return <div className="grid min-h-[65vh] place-items-center px-6 text-center"><div><p className="text-sm font-bold text-emerald-600">ERRO 404</p><h1 className="mt-3 text-4xl font-bold">Página não encontrada</h1><p className="mt-4 text-zinc-600">O conteúdo pode ter sido movido ou ainda não está disponível.</p><div className="mt-7"><ButtonLink href="/">Voltar ao início</ButtonLink></div></div></div>; }
