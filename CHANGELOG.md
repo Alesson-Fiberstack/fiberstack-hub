@@ -1,3 +1,12 @@
+# FiberStack v1.1.2 — Mercado Pago completo
+
+- Mercado Pago Point com recebimento D0, D14 e D30.
+- Mercado Pago Point Tap com recebimento D0, D14 e D30.
+- Checkout online com Pix e cartão de crédito até 12x.
+- Parcelamento Point até 18x.
+- Taxas baseadas na tabela oficial de 03/11/2025.
+- Ton e InfinitePay preservados sem remoções.
+
 # FiberStack v1.1.0 — Identidade Tech Premium
 
 - Nova identidade visual escura e tecnológica

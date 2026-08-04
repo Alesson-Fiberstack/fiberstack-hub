@@ -12,6 +12,8 @@ type PaymentType = "pix" | "debit" | "credit";
 type TonPlanId = "tapton" | "mega" | "black";
 type CardBrandId = "visa_master" | "elo_amex";
 type ReceiptId = "instant" | "one_day";
+type MpProductId = "point" | "pointtap" | "checkout";
+type MpReceiptId = "d0" | "d14" | "d30";
 
 type Provider = {
   id: ProviderId;
@@ -239,42 +241,66 @@ const tonTables: Record<TonPlanId, Partial<Record<CardBrandId, Partial<Record<Re
   },
 };
 
-const providers: Provider[] = [
-  {
-    id: "infinitepay",
-    name: "InfinitePay",
-    plan: "Plano inicial • até R$ 20 mil/mês • 1 dia útil",
-    note: "Taxas oficiais para Visa e Mastercard no plano inicial.",
-    rates: {
-      pix: 0,
-      debit: 1.37,
-      credit_1: 3.15,
-      credit_2: 5.39,
-      credit_3: 6.12,
-      credit_4: 6.85,
-      credit_5: 7.57,
-      credit_6: 8.28,
-      credit_7: 8.99,
-      credit_8: 9.69,
-      credit_9: 10.38,
-      credit_10: 11.06,
-      credit_11: 11.74,
-      credit_12: 12.4,
-    },
+const infinitePayProvider: Provider = {
+  id: "infinitepay",
+  name: "InfinitePay",
+  plan: "Plano inicial • até R$ 20 mil/mês • 1 dia útil",
+  note: "Taxas oficiais para Visa e Mastercard no plano inicial.",
+  rates: {
+    pix: 0,
+    debit: 1.37,
+    credit_1: 3.15,
+    credit_2: 5.39,
+    credit_3: 6.12,
+    credit_4: 6.85,
+    credit_5: 7.57,
+    credit_6: 8.28,
+    credit_7: 8.99,
+    credit_8: 9.69,
+    credit_9: 10.38,
+    credit_10: 11.06,
+    credit_11: 11.74,
+    credit_12: 12.4,
   },
-  {
+};
+
+const mpPointRates: Record<MpReceiptId, Record<string, number>> = {
+  d0: { debit: 1.99, credit_1: 4.98, credit_2: 9.90, credit_3: 11.28, credit_4: 12.64, credit_5: 13.97, credit_6: 15.27, credit_7: 16.55, credit_8: 17.81, credit_9: 19.04, credit_10: 20.24, credit_11: 21.43, credit_12: 22.59, credit_13: 23.73, credit_14: 24.85, credit_15: 25.95, credit_16: 27.02, credit_17: 28.08, credit_18: 29.12 },
+  d14: { debit: 1.99, credit_1: 3.79, credit_2: 8.95, credit_3: 10.33, credit_4: 11.69, credit_5: 13.02, credit_6: 14.32, credit_7: 15.60, credit_8: 16.86, credit_9: 18.09, credit_10: 19.29, credit_11: 20.48, credit_12: 21.64, credit_13: 22.78, credit_14: 23.90, credit_15: 25.00, credit_16: 26.07, credit_17: 27.13, credit_18: 28.17 },
+  d30: { debit: 1.99, credit_1: 3.03, credit_2: 8.19, credit_3: 9.57, credit_4: 10.93, credit_5: 12.26, credit_6: 13.56, credit_7: 14.84, credit_8: 16.10, credit_9: 17.33, credit_10: 18.53, credit_11: 19.72, credit_12: 20.88, credit_13: 22.02, credit_14: 23.14, credit_15: 24.24, credit_16: 25.31, credit_17: 26.37, credit_18: 27.41 },
+};
+
+const mpPointTapRates: Record<MpReceiptId, Record<string, number>> = {
+  d0: { debit: 0.89, credit_1: 3.09, credit_2: 5.79, credit_3: 6.09, credit_4: 7.99, credit_5: 8.09, credit_6: 8.19, credit_7: 9.49, credit_8: 9.68, credit_9: 10.37, credit_10: 11.05, credit_11: 12.27, credit_12: 12.38 },
+  d14: { debit: 0.89, credit_1: 3.09, credit_2: 5.74, credit_3: 6.04, credit_4: 7.94, credit_5: 8.04, credit_6: 8.11, credit_7: 9.44, credit_8: 9.63, credit_9: 10.32, credit_10: 11.00, credit_11: 12.22, credit_12: 12.33 },
+  d30: { debit: 0.89, credit_1: 3.09, credit_2: 5.69, credit_3: 5.99, credit_4: 7.89, credit_5: 7.99, credit_6: 8.09, credit_7: 9.39, credit_8: 9.58, credit_9: 10.27, credit_10: 10.95, credit_11: 12.17, credit_12: 12.28 },
+};
+
+const mpCheckoutRates: Record<MpReceiptId, Record<string, number>> = {
+  d0: { pix: 0.99, credit_1: 4.98, credit_2: 7.51, credit_3: 9.60, credit_4: 11.67, credit_5: 13.64, credit_6: 14.94, credit_7: 16.22, credit_8: 17.48, credit_9: 18.71, credit_10: 19.91, credit_11: 21.10, credit_12: 22.26 },
+  d14: { pix: 0.99, credit_1: 4.49, credit_2: 7.02, credit_3: 9.11, credit_4: 11.18, credit_5: 13.15, credit_6: 14.45, credit_7: 15.73, credit_8: 16.99, credit_9: 18.22, credit_10: 19.42, credit_11: 20.61, credit_12: 21.77 },
+  d30: { pix: 0.99, credit_1: 3.99, credit_2: 6.52, credit_3: 8.61, credit_4: 10.68, credit_5: 12.65, credit_6: 13.95, credit_7: 15.23, credit_8: 16.49, credit_9: 17.72, credit_10: 18.92, credit_11: 20.11, credit_12: 21.27 },
+};
+
+const mpProductLabels: Record<MpProductId, string> = {
+  point: "Maquininha Point",
+  pointtap: "Point Tap",
+  checkout: "Checkout online",
+};
+
+function mercadoPagoProvider(product: MpProductId, receipt: MpReceiptId): Provider {
+  const rates = product === "point" ? mpPointRates[receipt] : product === "pointtap" ? mpPointTapRates[receipt] : mpCheckoutRates[receipt];
+  const receiptLabel = receipt === "d0" ? "na hora (D0)" : receipt === "d14" ? "14 dias (D14)" : "30 dias (D30)";
+  return {
     id: "mercadopago",
     name: "Mercado Pago",
-    plan: "Plano promocional • novos clientes",
-    note: "Promoção oficial por 30 dias ou até R$ 5 mil em vendas. Parcelas intermediárias ainda serão adicionadas após validação oficial.",
-    rates: {
-      pix: 0,
-      debit: 0.74,
-      credit_1: 0.74,
-      credit_12: 8.99,
-    },
-  },
-];
+    plan: `${mpProductLabels[product]} • ${receiptLabel}`,
+    note: product === "checkout"
+      ? "Tabela oficial para checkout online, parcelado sem acréscimos absorvidos pelo vendedor."
+      : "Tabela oficial para vendas presenciais, tarifas absorvidas pelo vendedor.",
+    rates,
+  };
+}
 
 function rateKey(type: PaymentType, installments: number) {
   if (type === "pix") return "pix";
@@ -290,12 +316,15 @@ export default function CalculadoraPage() {
   const [tonPlan, setTonPlan] = useState<TonPlanId>("tapton");
   const [cardBrand, setCardBrand] = useState<CardBrandId>("visa_master");
   const [receipt, setReceipt] = useState<ReceiptId>("one_day");
+  const [mpProduct, setMpProduct] = useState<MpProductId>("point");
+  const [mpReceipt, setMpReceipt] = useState<MpReceiptId>("d0");
 
   const tonTable = tonTables[tonPlan]?.[cardBrand]?.[receipt];
   const fallbackTonTable = tonTables[tonPlan]?.visa_master?.one_day;
   const activeTonTable = tonTable ?? fallbackTonTable;
 
-  const externalProvider = providers.find((item) => item.id === providerId);
+  const mpProvider = mercadoPagoProvider(mpProduct, mpReceipt);
+  const externalProvider = providerId === "infinitepay" ? infinitePayProvider : mpProvider;
   const activeProvider: Provider = providerId === "ton"
     ? {
         id: "ton",
@@ -305,7 +334,7 @@ export default function CalculadoraPage() {
         href: "/go/ton",
         rates: activeTonTable?.rates ?? {},
       }
-    : externalProvider ?? providers[0];
+    : externalProvider;
 
   const key = rateKey(paymentType, installments);
   const rate = activeProvider.rates[key];
@@ -325,7 +354,8 @@ export default function CalculadoraPage() {
       href: "/go/ton",
       rates: activeTonTable?.rates ?? {},
     },
-    ...providers,
+    infinitePayProvider,
+    mpProvider,
   ];
 
   const comparison = comparisonProviders
@@ -338,7 +368,7 @@ export default function CalculadoraPage() {
     .filter(Boolean)
     .sort((a, b) => (a?.fee ?? 0) - (b?.fee ?? 0));
 
-  const maxInstallments = providerId === "ton" && tonPlan !== "tapton" ? 21 : 12;
+  const maxInstallments = providerId === "ton" && tonPlan !== "tapton" ? 21 : providerId === "mercadopago" && mpProduct === "point" ? 18 : 12;
 
   function chooseTonPlan(plan: TonPlanId) {
     setTonPlan(plan);
@@ -365,7 +395,7 @@ export default function CalculadoraPage() {
             const active = id === providerId;
             const item = id === "ton"
               ? { name: "Ton", plan: activeTonTable?.label ?? "Escolha o plano" }
-              : providers.find((provider) => provider.id === id)!;
+              : id === "infinitepay" ? infinitePayProvider : mpProvider;
             return (
               <button
                 key={id}
@@ -434,6 +464,41 @@ export default function CalculadoraPage() {
               </div>
             )}
 
+            {providerId === "mercadopago" && (
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label className="block text-sm font-semibold">Produto Mercado Pago</label>
+                  <select
+                    value={mpProduct}
+                    onChange={(event) => {
+                      const product = event.target.value as MpProductId;
+                      setMpProduct(product);
+                      if (product !== "point" && installments > 12) setInstallments(12);
+                      if (product === "checkout" && paymentType === "debit") setPaymentType("credit");
+                    }}
+                    className="mt-2 h-12 w-full rounded-xl border border-white/10 bg-[#071019] px-4 text-white outline-none focus:border-emerald-500"
+                  >
+                    <option value="point">Maquininha Point</option>
+                    <option value="pointtap">Point Tap</option>
+                    <option value="checkout">Checkout online</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold">Recebimento</label>
+                  <select
+                    value={mpReceipt}
+                    onChange={(event) => setMpReceipt(event.target.value as MpReceiptId)}
+                    className="mt-2 h-12 w-full rounded-xl border border-white/10 bg-[#071019] px-4 text-white outline-none focus:border-emerald-500"
+                  >
+                    <option value="d0">Na hora (D0)</option>
+                    <option value="d14">14 dias (D14)</option>
+                    <option value="d30">30 dias (D30)</option>
+                  </select>
+                </div>
+              </div>
+            )}
+
             <label className="mt-6 block text-sm font-semibold">Valor da venda</label>
             <input
               type="number"
@@ -454,11 +519,12 @@ export default function CalculadoraPage() {
                 <button
                   key={id}
                   type="button"
+                  disabled={providerId === "mercadopago" && mpProduct === "checkout" && id === "debit"}
                   onClick={() => {
                     setPaymentType(id);
                     if (id !== "credit") setInstallments(1);
                   }}
-                  className={`h-12 rounded-xl border text-sm font-semibold transition ${
+                  className={`h-12 rounded-xl border text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-40 ${
                     paymentType === id
                       ? "border-emerald-400 bg-gradient-to-r from-emerald-500 to-cyan-500 text-[#03130c]"
                       : "border-white/10 bg-white/[.03] hover:border-white/20"
@@ -560,7 +626,7 @@ export default function CalculadoraPage() {
         </div>
 
         <div className="mt-8 rounded-2xl border border-amber-400/15 bg-amber-400/[.06] p-5 text-sm text-amber-200">
-          <strong>Atualização:</strong> taxas consultadas em agosto de 2026. Ton: TapTon, Ton Mega+ e Ton Black, com filtros de bandeira e prazo de recebimento. InfinitePay: plano inicial de até R$ 20 mil/mês, Visa/Mastercard, recebimento em 1 dia útil. Mercado Pago: plano promocional para novos clientes.
+          <strong>Atualização:</strong> Ton e InfinitePay consultadas em agosto de 2026. Ton: TapTon, Ton Mega+ e Ton Black, com filtros de bandeira e prazo de recebimento. InfinitePay: plano inicial de até R$ 20 mil/mês, Visa/Mastercard, recebimento em 1 dia útil. Mercado Pago: tabela oficial de 03/11/2025 para Point, Point Tap e Checkout online, com recebimento D0, D14 e D30.
         </div>
       </Container>
     </section>
