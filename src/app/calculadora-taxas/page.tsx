@@ -14,6 +14,9 @@ type CardBrandId = "visa_master" | "elo_amex";
 type ReceiptId = "instant" | "one_day";
 type MpProductId = "point" | "pointtap" | "checkout";
 type MpReceiptId = "d0" | "d14" | "d30";
+type InfProductId = "machine" | "link";
+type InfReceiptId = "one_day" | "instant" | "no_anticipation";
+type InfTierId = "above_80" | "above_40" | "above_20" | "up_to_20";
 
 type Provider = {
   id: ProviderId;
@@ -241,28 +244,79 @@ const tonTables: Record<TonPlanId, Partial<Record<CardBrandId, Partial<Record<Re
   },
 };
 
-const infinitePayProvider: Provider = {
-  id: "infinitepay",
-  name: "InfinitePay",
-  plan: "Plano inicial • até R$ 20 mil/mês • 1 dia útil",
-  note: "Taxas oficiais para Visa e Mastercard no plano inicial.",
-  rates: {
-    pix: 0,
-    debit: 1.37,
-    credit_1: 3.15,
-    credit_2: 5.39,
-    credit_3: 6.12,
-    credit_4: 6.85,
-    credit_5: 7.57,
-    credit_6: 8.28,
-    credit_7: 8.99,
-    credit_8: 9.69,
-    credit_9: 10.38,
-    credit_10: 11.06,
-    credit_11: 11.74,
-    credit_12: 12.4,
+const infOneDayRates: Record<InfTierId, Record<CardBrandId, Record<string, number>>> = {
+  above_80: {
+    visa_master: { pix: 0, debit: 0.75, credit_1: 2.69, credit_2: 3.94, credit_3: 4.46, credit_4: 4.98, credit_5: 5.49, credit_6: 5.99, credit_7: 6.51, credit_8: 6.99, credit_9: 7.51, credit_10: 7.99, credit_11: 8.49, credit_12: 8.99 },
+    elo_amex: { pix: 0, debit: 1.88, credit_1: 4.46, credit_2: 5.81, credit_3: 6.32, credit_4: 6.83, credit_5: 7.33, credit_6: 7.83, credit_7: 8.34, credit_8: 8.83, credit_9: 9.32, credit_10: 9.81, credit_11: 10.29, credit_12: 10.77 },
+  },
+  above_40: {
+    visa_master: { pix: 0, debit: 0.79, credit_1: 2.79, credit_2: 4.08, credit_3: 4.65, credit_4: 5.21, credit_5: 5.77, credit_6: 6.32, credit_7: 6.87, credit_8: 7.42, credit_9: 7.96, credit_10: 8.49, credit_11: 9.03, credit_12: 9.56 },
+    elo_amex: { pix: 0, debit: 1.98, credit_1: 4.56, credit_2: 5.95, credit_3: 6.50, credit_4: 7.05, credit_5: 7.60, credit_6: 8.15, credit_7: 8.69, credit_8: 9.23, credit_9: 9.76, credit_10: 10.29, credit_11: 10.81, credit_12: 11.33 },
+  },
+  above_20: {
+    visa_master: { pix: 0, debit: 0.85, credit_1: 2.89, credit_2: 4.22, credit_3: 4.83, credit_4: 5.44, credit_5: 6.05, credit_6: 6.64, credit_7: 7.24, credit_8: 7.82, credit_9: 8.41, credit_10: 8.98, credit_11: 9.56, credit_12: 10.12 },
+    elo_amex: { pix: 0, debit: 2.08, credit_1: 4.65, credit_2: 6.09, credit_3: 6.69, credit_4: 7.28, credit_5: 7.87, credit_6: 8.46, credit_7: 9.05, credit_8: 9.63, credit_9: 10.20, credit_10: 10.76, credit_11: 11.33, credit_12: 11.88 },
+  },
+  up_to_20: {
+    visa_master: { pix: 0, debit: 1.37, credit_1: 3.15, credit_2: 5.39, credit_3: 6.12, credit_4: 6.85, credit_5: 7.57, credit_6: 8.28, credit_7: 8.99, credit_8: 9.69, credit_9: 10.38, credit_10: 11.06, credit_11: 11.74, credit_12: 12.40 },
+    elo_amex: { pix: 0, debit: 2.58, credit_1: 4.91, credit_2: 6.47, credit_3: 7.20, credit_4: 7.92, credit_5: 8.63, credit_6: 9.33, credit_7: 10.03, credit_8: 10.72, credit_9: 11.41, credit_10: 12.08, credit_11: 12.75, credit_12: 13.41 },
   },
 };
+
+const infInstantRates: Record<string, number> = { pix: 0, debit: 2.29, credit_1: 5.49, credit_2: 10.89, credit_3: 11.99, credit_4: 12.59, credit_5: 13.29, credit_6: 13.99, credit_7: 14.99, credit_8: 15.59, credit_9: 16.19, credit_10: 16.89, credit_11: 17.89, credit_12: 18.29 };
+
+const infNoAnticipationRates: Partial<Record<InfTierId, Record<CardBrandId, Record<string, number>>>> = {
+  above_80: {
+    visa_master: { pix: 0, debit: 0.75, credit_1: 1.62, credit_2: 2.25, credit_3: 2.25, credit_4: 2.25, credit_5: 2.25, credit_6: 2.25, credit_7: 2.25, credit_8: 2.25, credit_9: 2.25, credit_10: 2.25, credit_11: 2.25, credit_12: 2.25 },
+    elo_amex: { pix: 0, debit: 1.88, credit_1: 3.40, credit_2: 4.15, credit_3: 4.15, credit_4: 4.15, credit_5: 4.15, credit_6: 4.15, credit_7: 4.15, credit_8: 4.15, credit_9: 4.15, credit_10: 4.15, credit_11: 4.15, credit_12: 4.15 },
+  },
+  above_40: {
+    visa_master: { pix: 0, debit: 0.79, credit_1: 2.12, credit_2: 2.60, credit_3: 2.60, credit_4: 2.60, credit_5: 2.60, credit_6: 2.60, credit_7: 2.60, credit_8: 2.60, credit_9: 2.60, credit_10: 2.60, credit_11: 2.60, credit_12: 2.60 },
+    elo_amex: { pix: 0, debit: 1.98, credit_1: 3.90, credit_2: 4.50, credit_3: 4.50, credit_4: 4.50, credit_5: 4.50, credit_6: 4.50, credit_7: 4.50, credit_8: 4.50, credit_9: 4.50, credit_10: 4.50, credit_11: 4.50, credit_12: 4.50 },
+  },
+  above_20: {
+    visa_master: { pix: 0, debit: 0.85, credit_1: 2.22, credit_2: 2.75, credit_3: 2.75, credit_4: 2.75, credit_5: 2.75, credit_6: 2.75, credit_7: 2.75, credit_8: 2.75, credit_9: 2.75, credit_10: 2.75, credit_11: 2.75, credit_12: 2.75 },
+    elo_amex: { pix: 0, debit: 2.08, credit_1: 4.00, credit_2: 4.65, credit_3: 4.65, credit_4: 4.65, credit_5: 4.65, credit_6: 4.65, credit_7: 4.65, credit_8: 4.65, credit_9: 4.65, credit_10: 4.65, credit_11: 4.65, credit_12: 4.65 },
+  },
+};
+
+const infLinkOneDayRates: Record<string, number> = { pix: 0, credit_1: 4.20, credit_2: 6.09, credit_3: 7.01, credit_4: 7.91, credit_5: 8.80, credit_6: 9.67, credit_7: 12.59, credit_8: 13.42, credit_9: 14.25, credit_10: 15.06, credit_11: 15.87, credit_12: 16.66 };
+const infLinkInstantRates: Record<string, number> = { pix: 0, credit_1: 5.49, credit_2: 10.89, credit_3: 11.99, credit_4: 12.59, credit_5: 13.29, credit_6: 13.99, credit_7: 14.99, credit_8: 15.59, credit_9: 16.19, credit_10: 16.89, credit_11: 17.89, credit_12: 18.29 };
+const infLinkNoAnticipationRates: Partial<Record<InfTierId, Record<string, number>>> = {
+  above_80: { pix: 0, credit_1: 2.29, credit_2: 3.18, credit_3: 3.18, credit_4: 3.18, credit_5: 3.18, credit_6: 3.18, credit_7: 5.39, credit_8: 5.39, credit_9: 5.39, credit_10: 5.39, credit_11: 5.39, credit_12: 5.39 },
+  above_40: { pix: 0, credit_1: 2.79, credit_2: 3.53, credit_3: 3.53, credit_4: 3.53, credit_5: 3.53, credit_6: 3.53, credit_7: 5.74, credit_8: 5.74, credit_9: 5.74, credit_10: 5.74, credit_11: 5.74, credit_12: 5.74 },
+  above_20: { pix: 0, credit_1: 2.89, credit_2: 3.68, credit_3: 3.68, credit_4: 3.68, credit_5: 3.68, credit_6: 3.68, credit_7: 5.89, credit_8: 5.89, credit_9: 5.89, credit_10: 5.89, credit_11: 5.89, credit_12: 5.89 },
+};
+
+const infTierLabels: Record<InfTierId, string> = {
+  above_80: "Acima de R$ 80 mil/mês",
+  above_40: "Acima de R$ 40 mil/mês",
+  above_20: "Acima de R$ 20 mil/mês",
+  up_to_20: "Até R$ 20 mil/mês",
+};
+
+function infinitePayProvider(product: InfProductId, receipt: InfReceiptId, tier: InfTierId, brand: CardBrandId): Provider {
+  let rates: Record<string, number> = {};
+  if (product === "machine") {
+    if (receipt === "one_day") rates = infOneDayRates[tier][brand];
+    else if (receipt === "instant") rates = infInstantRates;
+    else rates = infNoAnticipationRates[tier]?.[brand] ?? {};
+  } else {
+    if (receipt === "one_day") rates = infLinkOneDayRates;
+    else if (receipt === "instant") rates = infLinkInstantRates;
+    else rates = infLinkNoAnticipationRates[tier] ?? {};
+  }
+  const productLabel = product === "machine" ? "Maquininha e InfiniteTap" : "Link de pagamento e venda online";
+  const receiptLabel = receipt === "one_day" ? "1 dia útil" : receipt === "instant" ? "na hora" : "sem antecipação";
+  const tierLabel = receipt === "instant" || (product === "link" && receipt !== "no_anticipation") ? "tabela única" : infTierLabels[tier];
+  return {
+    id: "infinitepay",
+    name: "InfinitePay",
+    plan: `${productLabel} • ${receiptLabel} • ${tierLabel}`,
+    note: "Taxas informadas pela InfinitePay, com antecipação das parcelas conforme o plano selecionado.",
+    rates,
+  };
+}
 
 const mpPointRates: Record<MpReceiptId, Record<string, number>> = {
   d0: { debit: 1.99, credit_1: 4.98, credit_2: 9.90, credit_3: 11.28, credit_4: 12.64, credit_5: 13.97, credit_6: 15.27, credit_7: 16.55, credit_8: 17.81, credit_9: 19.04, credit_10: 20.24, credit_11: 21.43, credit_12: 22.59, credit_13: 23.73, credit_14: 24.85, credit_15: 25.95, credit_16: 27.02, credit_17: 28.08, credit_18: 29.12 },
@@ -318,13 +372,18 @@ export default function CalculadoraPage() {
   const [receipt, setReceipt] = useState<ReceiptId>("one_day");
   const [mpProduct, setMpProduct] = useState<MpProductId>("point");
   const [mpReceipt, setMpReceipt] = useState<MpReceiptId>("d0");
+  const [infProduct, setInfProduct] = useState<InfProductId>("machine");
+  const [infReceipt, setInfReceipt] = useState<InfReceiptId>("one_day");
+  const [infTier, setInfTier] = useState<InfTierId>("up_to_20");
+  const [infBrand, setInfBrand] = useState<CardBrandId>("visa_master");
 
   const tonTable = tonTables[tonPlan]?.[cardBrand]?.[receipt];
   const fallbackTonTable = tonTables[tonPlan]?.visa_master?.one_day;
   const activeTonTable = tonTable ?? fallbackTonTable;
 
   const mpProvider = mercadoPagoProvider(mpProduct, mpReceipt);
-  const externalProvider = providerId === "infinitepay" ? infinitePayProvider : mpProvider;
+  const infProvider = infinitePayProvider(infProduct, infReceipt, infTier, infBrand);
+  const externalProvider = providerId === "infinitepay" ? infProvider : mpProvider;
   const activeProvider: Provider = providerId === "ton"
     ? {
         id: "ton",
@@ -354,7 +413,7 @@ export default function CalculadoraPage() {
       href: "/go/ton",
       rates: activeTonTable?.rates ?? {},
     },
-    infinitePayProvider,
+    infProvider,
     mpProvider,
   ];
 
@@ -395,7 +454,7 @@ export default function CalculadoraPage() {
             const active = id === providerId;
             const item = id === "ton"
               ? { name: "Ton", plan: activeTonTable?.label ?? "Escolha o plano" }
-              : id === "infinitepay" ? infinitePayProvider : mpProvider;
+              : id === "infinitepay" ? infProvider : mpProvider;
             return (
               <button
                 key={id}
@@ -464,6 +523,42 @@ export default function CalculadoraPage() {
               </div>
             )}
 
+            {providerId === "infinitepay" && (
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label className="block text-sm font-semibold">Produto InfinitePay</label>
+                  <select value={infProduct} onChange={(event) => { const product = event.target.value as InfProductId; setInfProduct(product); if (product === "link" && paymentType === "debit") setPaymentType("credit"); }} className="mt-2 h-12 w-full rounded-xl border border-white/10 bg-[#071019] px-4 text-white outline-none focus:border-emerald-500">
+                    <option value="machine">Maquininha e InfiniteTap</option>
+                    <option value="link">Link de pagamento e venda online</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold">Recebimento</label>
+                  <select value={infReceipt} onChange={(event) => { const nextReceipt = event.target.value as InfReceiptId; setInfReceipt(nextReceipt); if (nextReceipt === "no_anticipation" && infTier === "up_to_20") setInfTier("above_20"); }} className="mt-2 h-12 w-full rounded-xl border border-white/10 bg-[#071019] px-4 text-white outline-none focus:border-emerald-500">
+                    <option value="one_day">1 dia útil</option>
+                    <option value="instant">Na hora</option>
+                    <option value="no_anticipation">Sem antecipação</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold">Faturamento mensal</label>
+                  <select value={infTier} disabled={infReceipt === "instant" || (infProduct === "link" && infReceipt !== "no_anticipation")} onChange={(event) => setInfTier(event.target.value as InfTierId)} className="mt-2 h-12 w-full rounded-xl border border-white/10 bg-[#071019] px-4 text-white outline-none disabled:cursor-not-allowed disabled:opacity-50 focus:border-emerald-500">
+                    <option value="above_80">Acima de R$ 80 mil/mês</option>
+                    <option value="above_40">Acima de R$ 40 mil/mês</option>
+                    <option value="above_20">Acima de R$ 20 mil/mês</option>
+                    {infReceipt !== "no_anticipation" && <option value="up_to_20">Até R$ 20 mil/mês</option>}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold">Bandeira</label>
+                  <select value={infBrand} disabled={infReceipt === "instant" || infProduct === "link"} onChange={(event) => setInfBrand(event.target.value as CardBrandId)} className="mt-2 h-12 w-full rounded-xl border border-white/10 bg-[#071019] px-4 text-white outline-none disabled:cursor-not-allowed disabled:opacity-50 focus:border-emerald-500">
+                    <option value="visa_master">Visa e Mastercard</option>
+                    <option value="elo_amex">Elo e Amex</option>
+                  </select>
+                </div>
+              </div>
+            )}
+
             {providerId === "mercadopago" && (
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
                 <div>
@@ -519,7 +614,7 @@ export default function CalculadoraPage() {
                 <button
                   key={id}
                   type="button"
-                  disabled={providerId === "mercadopago" && mpProduct === "checkout" && id === "debit"}
+                  disabled={((providerId === "mercadopago" && mpProduct === "checkout") || (providerId === "infinitepay" && infProduct === "link")) && id === "debit"}
                   onClick={() => {
                     setPaymentType(id);
                     if (id !== "credit") setInstallments(1);
@@ -626,7 +721,7 @@ export default function CalculadoraPage() {
         </div>
 
         <div className="mt-8 rounded-2xl border border-amber-400/15 bg-amber-400/[.06] p-5 text-sm text-amber-200">
-          <strong>Atualização:</strong> Ton e InfinitePay consultadas em agosto de 2026. Ton: TapTon, Ton Mega+ e Ton Black, com filtros de bandeira e prazo de recebimento. InfinitePay: plano inicial de até R$ 20 mil/mês, Visa/Mastercard, recebimento em 1 dia útil. Mercado Pago: tabela oficial de 03/11/2025 para Point, Point Tap e Checkout online, com recebimento D0, D14 e D30.
+          <strong>Atualização:</strong> Ton e InfinitePay consultadas em agosto de 2026. Ton: TapTon, Ton Mega+ e Ton Black, com filtros de bandeira e prazo de recebimento. InfinitePay: maquininha, InfiniteTap e link de pagamento, com filtros de recebimento, faturamento e bandeira. Mercado Pago: tabela oficial de 03/11/2025 para Point, Point Tap e Checkout online, com recebimento D0, D14 e D30.
         </div>
       </Container>
     </section>
