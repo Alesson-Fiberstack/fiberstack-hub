@@ -13,10 +13,10 @@ export function MachineComparison({
   rows,
 }: MachineComparisonProps) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-white">
+    <div className="overflow-hidden rounded-2xl border border-white/10 bg-white/[.035]">
       <div className="overflow-x-auto">
         <table className="min-w-[760px] w-full border-collapse text-left">
-          <thead className="bg-zinc-950 text-white">
+          <thead className="bg-[#03070a] text-white">
             <tr>
               <th className="px-5 py-4 text-sm font-bold">Comparação</th>
               {columns.map((column) => (
@@ -30,15 +30,15 @@ export function MachineComparison({
             {rows.map((row, index) => (
               <tr
                 key={row.label}
-                className={index % 2 === 0 ? "bg-white" : "bg-zinc-50"}
+                className={index % 2 === 0 ? "bg-white/[.035]" : "bg-white/[.02]"}
               >
-                <th className="border-t border-zinc-200 px-5 py-4 text-sm font-bold text-zinc-950">
+                <th className="border-t border-white/10 px-5 py-4 text-sm font-bold text-white">
                   {row.label}
                 </th>
                 {row.values.map((value, valueIndex) => (
                   <td
                     key={`${row.label}-${valueIndex}`}
-                    className="border-t border-zinc-200 px-5 py-4 text-sm text-zinc-600"
+                    className="border-t border-white/10 px-5 py-4 text-sm text-slate-400"
                   >
                     {value}
                   </td>

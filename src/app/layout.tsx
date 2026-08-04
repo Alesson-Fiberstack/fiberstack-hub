@@ -26,6 +26,8 @@ export const metadata: Metadata = {
     google: "9H-FPpasXm9AI6-n_2jTxANiTCoMM_-An8qoq70VJcg",
   },
 
+  icons: { icon: "/brand/fiberstack-mark.svg", shortcut: "/brand/fiberstack-mark.svg", apple: "/brand/fiberstack-mark.svg" },
+
   robots: {
     index: true,
     follow: true,

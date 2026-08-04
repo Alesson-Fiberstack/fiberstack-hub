@@ -18,9 +18,9 @@ export function OfferCTA({
   return (
     <section className="pb-20">
       <Container>
-        <div className="rounded-3xl bg-zinc-950 px-6 py-14 text-center text-white sm:px-12">
+        <div className="rounded-3xl bg-[#03070a] px-6 py-14 text-center text-white sm:px-12">
           <h2 className="text-3xl font-bold sm:text-4xl">{title}</h2>
-          <p className="mx-auto mt-4 max-w-2xl text-zinc-400">{description}</p>
+          <p className="mx-auto mt-4 max-w-2xl text-slate-400">{description}</p>
           <div className="mt-8">
             <ButtonLink href={href} target="_blank" size="lg">
               {buttonLabel} <ExternalLink size={18} />

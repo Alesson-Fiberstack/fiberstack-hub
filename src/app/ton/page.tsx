@@ -160,14 +160,14 @@ const faqItems: FAQItem[] = [
 export default function TonPage() {
   return (
     <>
-      <section className="overflow-hidden border-b border-zinc-200 bg-[radial-gradient(circle_at_top_right,rgba(0,200,83,.16),transparent_40%)] py-16 sm:py-24">
+      <section className="overflow-hidden border-b border-white/10 bg-[radial-gradient(circle_at_top_right,rgba(0,200,83,.16),transparent_40%)] py-16 sm:py-24">
         <Container className="grid items-center gap-12 lg:grid-cols-[1.08fr_.92fr]">
           <div>
             <Badge>Oferta de parceiro</Badge>
-            <h1 className="mt-5 max-w-3xl text-4xl font-extrabold tracking-[-.04em] text-zinc-950 sm:text-6xl">
+            <h1 className="mt-5 max-w-3xl text-4xl font-extrabold tracking-[-.04em] text-white sm:text-6xl">
               Maquininhas Ton com desconto pelo link da FiberStack
             </h1>
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-zinc-600">
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-400">
               Compare os perfis dos principais modelos, confira os benefícios e
               acesse as condições oficiais antes de escolher.
             </p>
@@ -189,29 +189,29 @@ export default function TonPage() {
               </ButtonLink>
             </div>
 
-            <p className="mt-4 text-xs leading-5 text-zinc-500">
+            <p className="mt-4 text-xs leading-5 text-slate-500">
               A FiberStack pode receber comissão quando uma compra é concluída
               pelo link indicado. Isso não aumenta o preço para você.
             </p>
           </div>
 
-          <div className="rounded-3xl border border-zinc-200 bg-white p-5 shadow-[0_30px_80px_rgba(0,0,0,.1)]">
-            <div className="rounded-2xl bg-zinc-950 p-6 text-white">
+          <div className="rounded-3xl border border-white/10 bg-white/[.035] p-5 shadow-[0_30px_80px_rgba(0,0,0,.1)]">
+            <div className="rounded-2xl bg-[#03070a] p-6 text-white">
               <p className="text-sm text-emerald-400">Resumo da oferta</p>
               <p className="mt-2 text-2xl font-bold">
                 Venda sem aluguel e escolha o modelo certo para sua rotina
               </p>
               <div className="mt-6 grid gap-3 text-sm text-zinc-200">
-                <div className="rounded-xl bg-white/10 p-4">
+                <div className="rounded-xl bg-white/[.035]/10 p-4">
                   Desconto promocional de até 72% na adesão
                 </div>
-                <div className="rounded-xl bg-white/10 p-4">
+                <div className="rounded-xl bg-white/[.035]/10 p-4">
                   Taxas promocionais a partir de 0,57%
                 </div>
-                <div className="rounded-xl bg-white/10 p-4">
+                <div className="rounded-xl bg-white/[.035]/10 p-4">
                   Garantia vitalícia em modelos elegíveis
                 </div>
-                <div className="rounded-xl bg-white/10 p-4">
+                <div className="rounded-xl bg-white/[.035]/10 p-4">
                   Sem cobrança de aluguel
                 </div>
               </div>
@@ -223,13 +223,13 @@ export default function TonPage() {
       <section className="py-16 sm:py-20">
         <Container>
           <div className="mx-auto max-w-3xl text-center">
-            <p className="text-sm font-bold uppercase tracking-[.18em] text-emerald-700">
+            <p className="text-sm font-bold uppercase tracking-[.18em] text-emerald-300">
               Benefícios principais
             </p>
             <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
               Uma solução simples para receber pagamentos
             </h2>
-            <p className="mt-4 text-zinc-600">
+            <p className="mt-4 text-slate-400">
               As condições variam por plano, modelo e campanha. Confirme os
               dados finais na página oficial antes de comprar.
             </p>
@@ -238,27 +238,27 @@ export default function TonPage() {
           <div className="mt-10 grid gap-5 md:grid-cols-2">
             {benefits.map(({ icon: Icon, title, description }) => (
               <Card key={title}>
-                <div className="grid size-11 place-items-center rounded-xl bg-emerald-50 text-emerald-700">
+                <div className="grid size-11 place-items-center rounded-xl bg-emerald-400/10 text-emerald-300">
                   <Icon size={22} />
                 </div>
                 <h3 className="mt-5 text-xl font-bold">{title}</h3>
-                <p className="mt-3 leading-7 text-zinc-600">{description}</p>
+                <p className="mt-3 leading-7 text-slate-400">{description}</p>
               </Card>
             ))}
           </div>
         </Container>
       </section>
 
-      <section className="bg-zinc-50 py-16 sm:py-20">
+      <section className="bg-white/[.02] py-16 sm:py-20">
         <Container>
           <div className="mx-auto max-w-3xl text-center">
-            <p className="text-sm font-bold uppercase tracking-[.18em] text-emerald-700">
+            <p className="text-sm font-bold uppercase tracking-[.18em] text-emerald-300">
               Escolha seu modelo
             </p>
             <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
               Uma opção para cada fase do negócio
             </h2>
-            <p className="mt-4 text-zinc-600">
+            <p className="mt-4 text-slate-400">
               Os nomes, recursos e disponibilidade devem ser confirmados no
               catálogo oficial antes da compra.
             </p>
@@ -275,7 +275,7 @@ export default function TonPage() {
       <section className="py-16 sm:py-20">
         <Container>
           <div className="mx-auto max-w-3xl text-center">
-            <p className="text-sm font-bold uppercase tracking-[.18em] text-emerald-700">
+            <p className="text-sm font-bold uppercase tracking-[.18em] text-emerald-300">
               Comparação rápida
             </p>
             <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
@@ -292,10 +292,10 @@ export default function TonPage() {
         </Container>
       </section>
 
-      <section className="bg-zinc-50 py-16 sm:py-20">
+      <section className="bg-white/[.02] py-16 sm:py-20">
         <Container>
           <div className="mx-auto mb-10 max-w-3xl text-center">
-            <p className="text-sm font-bold uppercase tracking-[.18em] text-emerald-700">
+            <p className="text-sm font-bold uppercase tracking-[.18em] text-emerald-300">
               Dúvidas frequentes
             </p>
             <h2 className="mt-3 text-3xl font-bold tracking-tight sm:text-4xl">
