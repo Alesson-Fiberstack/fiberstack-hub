@@ -5,7 +5,6 @@ import { Container } from "@/components/layout/container";
 import { Card } from "@/components/ui/card";
 import { ButtonLink } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
-import { siteConfig } from "@/config/site";
 
 type ProviderId = "ton" | "infinitepay" | "mercadopago" | "pagbank";
 type PaymentType = "pix" | "debit" | "credit";
@@ -314,6 +313,7 @@ function infinitePayProvider(product: InfProductId, receipt: InfReceiptId, tier:
     name: "InfinitePay",
     plan: `${productLabel} • ${receiptLabel} • ${tierLabel}`,
     note: "Taxas informadas pela InfinitePay, com antecipação das parcelas conforme o plano selecionado.",
+    href: product === "machine" ? "/go/infinitepay" : undefined,
     rates,
   };
 }
@@ -352,6 +352,7 @@ function mercadoPagoProvider(product: MpProductId, receipt: MpReceiptId): Provid
     note: product === "checkout"
       ? "Tabela oficial para checkout online, parcelado sem acréscimos absorvidos pelo vendedor."
       : "Tabela oficial para vendas presenciais, tarifas absorvidas pelo vendedor.",
+    href: product === "pointtap" ? "/go/mercadopago-tap" : product === "checkout" ? "/go/mercadopago-link" : "/go/mercadopago",
     rates,
   };
 }
@@ -398,6 +399,7 @@ function pagBankProvider(brand: CardBrandId): Provider {
     name: "PagBank",
     plan: `Plano Super Max • ${brand === "visa_master" ? "Visa e Mastercard" : "Elo e demais bandeiras"}`,
     note: "Taxas promocionais da campanha Plano Super Max. Confirme elegibilidade e vigência no regulamento oficial antes da contratação.",
+    href: "/go/pagbank",
     rates: pagBankRates[brand],
   };
 }
@@ -745,10 +747,10 @@ export default function CalculadoraPage() {
                   <p className="mt-2 text-4xl font-bold text-emerald-400">{formatCurrency(result.net)}</p>
                 </div>
 
-                {activeProvider.id === "ton" && (
+                {activeProvider.href && (
                   <div className="mt-6">
-                    <ButtonLink href={activeProvider.href ?? siteConfig.tonReferralUrl} target="_blank" className="w-full">
-                      Ver oferta da Ton
+                    <ButtonLink href={activeProvider.href} target="_blank" className="w-full">
+                      {activeProvider.id === "ton" ? "Ver oferta da Ton" : activeProvider.id === "infinitepay" ? "Ver oferta da InfinitePay" : activeProvider.id === "mercadopago" ? "Ver oferta do Mercado Pago" : "Ver oferta do PagBank"}
                     </ButtonLink>
                   </div>
                 )}
