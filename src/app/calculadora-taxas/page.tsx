@@ -7,7 +7,7 @@ import { ButtonLink } from "@/components/ui/button";
 import { formatCurrency } from "@/lib/utils";
 import { siteConfig } from "@/config/site";
 
-type ProviderId = "ton" | "infinitepay" | "mercadopago";
+type ProviderId = "ton" | "infinitepay" | "mercadopago" | "pagbank";
 type PaymentType = "pix" | "debit" | "credit";
 type TonPlanId = "tapton" | "mega" | "black";
 type CardBrandId = "visa_master" | "elo_amex";
@@ -356,6 +356,52 @@ function mercadoPagoProvider(product: MpProductId, receipt: MpReceiptId): Provid
   };
 }
 
+
+const pagBankRates: Record<CardBrandId, Record<string, number>> = {
+  visa_master: {
+    pix: 0,
+    debit: 0.58,
+    credit_1: 0.58,
+    credit_2: 3.98,
+    credit_3: 3.98,
+    credit_4: 4.98,
+    credit_5: 5.98,
+    credit_6: 6.98,
+    credit_7: 7.98,
+    credit_8: 7.98,
+    credit_9: 7.98,
+    credit_10: 7.98,
+    credit_11: 7.98,
+    credit_12: 7.98,
+  },
+  elo_amex: {
+    pix: 0,
+    debit: 2.57,
+    credit_1: 4.54,
+    credit_2: 7.02,
+    credit_3: 6.98,
+    credit_4: 6.98,
+    credit_5: 6.98,
+    credit_6: 6.98,
+    credit_7: 10.72,
+    credit_8: 10.72,
+    credit_9: 10.72,
+    credit_10: 10.72,
+    credit_11: 10.72,
+    credit_12: 10.72,
+  },
+};
+
+function pagBankProvider(brand: CardBrandId): Provider {
+  return {
+    id: "pagbank",
+    name: "PagBank",
+    plan: `Plano Super Max • ${brand === "visa_master" ? "Visa e Mastercard" : "Elo e demais bandeiras"}`,
+    note: "Taxas promocionais da campanha Plano Super Max. Confirme elegibilidade e vigência no regulamento oficial antes da contratação.",
+    rates: pagBankRates[brand],
+  };
+}
+
 function rateKey(type: PaymentType, installments: number) {
   if (type === "pix") return "pix";
   if (type === "debit") return "debit";
@@ -376,6 +422,7 @@ export default function CalculadoraPage() {
   const [infReceipt, setInfReceipt] = useState<InfReceiptId>("one_day");
   const [infTier, setInfTier] = useState<InfTierId>("up_to_20");
   const [infBrand, setInfBrand] = useState<CardBrandId>("visa_master");
+  const [pagBankBrand, setPagBankBrand] = useState<CardBrandId>("visa_master");
 
   const tonTable = tonTables[tonPlan]?.[cardBrand]?.[receipt];
   const fallbackTonTable = tonTables[tonPlan]?.visa_master?.one_day;
@@ -383,7 +430,8 @@ export default function CalculadoraPage() {
 
   const mpProvider = mercadoPagoProvider(mpProduct, mpReceipt);
   const infProvider = infinitePayProvider(infProduct, infReceipt, infTier, infBrand);
-  const externalProvider = providerId === "infinitepay" ? infProvider : mpProvider;
+  const pagBank = pagBankProvider(pagBankBrand);
+  const externalProvider = providerId === "infinitepay" ? infProvider : providerId === "mercadopago" ? mpProvider : pagBank;
   const activeProvider: Provider = providerId === "ton"
     ? {
         id: "ton",
@@ -415,6 +463,7 @@ export default function CalculadoraPage() {
     },
     infProvider,
     mpProvider,
+    pagBank,
   ];
 
   const comparison = comparisonProviders
@@ -449,12 +498,12 @@ export default function CalculadoraPage() {
           </p>
         </div>
 
-        <div className="mt-10 grid gap-3 sm:grid-cols-3">
-          {(["ton", "infinitepay", "mercadopago"] as ProviderId[]).map((id) => {
+        <div className="mt-10 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          {(["ton", "infinitepay", "mercadopago", "pagbank"] as ProviderId[]).map((id) => {
             const active = id === providerId;
             const item = id === "ton"
               ? { name: "Ton", plan: activeTonTable?.label ?? "Escolha o plano" }
-              : id === "infinitepay" ? infProvider : mpProvider;
+              : id === "infinitepay" ? infProvider : id === "mercadopago" ? mpProvider : pagBank;
             return (
               <button
                 key={id}
@@ -594,6 +643,34 @@ export default function CalculadoraPage() {
               </div>
             )}
 
+
+
+            {providerId === "pagbank" && (
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                <div>
+                  <label className="block text-sm font-semibold">Plano PagBank</label>
+                  <select
+                    value="super_max"
+                    disabled
+                    className="mt-2 h-12 w-full rounded-xl border border-white/10 bg-[#071019] px-4 text-white outline-none disabled:cursor-not-allowed disabled:opacity-70"
+                  >
+                    <option value="super_max">Plano Super Max — campanha</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold">Bandeira</label>
+                  <select
+                    value={pagBankBrand}
+                    onChange={(event) => setPagBankBrand(event.target.value as CardBrandId)}
+                    className="mt-2 h-12 w-full rounded-xl border border-white/10 bg-[#071019] px-4 text-white outline-none focus:border-emerald-500"
+                  >
+                    <option value="visa_master">Visa e Mastercard</option>
+                    <option value="elo_amex">Elo e demais bandeiras</option>
+                  </select>
+                </div>
+              </div>
+            )}
+
             <label className="mt-6 block text-sm font-semibold">Valor da venda</label>
             <input
               type="number"
@@ -721,7 +798,7 @@ export default function CalculadoraPage() {
         </div>
 
         <div className="mt-8 rounded-2xl border border-amber-400/15 bg-amber-400/[.06] p-5 text-sm text-amber-200">
-          <strong>Atualização:</strong> Ton e InfinitePay consultadas em agosto de 2026. Ton: TapTon, Ton Mega+ e Ton Black, com filtros de bandeira e prazo de recebimento. InfinitePay: maquininha, InfiniteTap e link de pagamento, com filtros de recebimento, faturamento e bandeira. Mercado Pago: tabela oficial de 03/11/2025 para Point, Point Tap e Checkout online, com recebimento D0, D14 e D30.
+          <strong>Atualização:</strong> Ton e InfinitePay consultadas em agosto de 2026. Ton: TapTon, Ton Mega+ e Ton Black, com filtros de bandeira e prazo de recebimento. InfinitePay: maquininha, InfiniteTap e link de pagamento, com filtros de recebimento, faturamento e bandeira. Mercado Pago: tabela oficial de 03/11/2025 para Point, Point Tap e Checkout online, com recebimento D0, D14 e D30. PagBank: campanha Plano Super Max, com separação entre Visa/Mastercard e Elo/demais bandeiras.
         </div>
       </Container>
     </section>

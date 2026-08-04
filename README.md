@@ -1,42 +1,14 @@
-# FiberStack Hub v0.3
+# FiberStack v1.1.4 — PagBank
 
-Plataforma inicial da FiberStack Soluções com homepage, comparador de maquininhas, calculadora de taxas, central de ferramentas e páginas institucionais.
+Copie o conteúdo deste pacote para a raiz do projeto FiberStack e substitua os arquivos existentes.
 
-## Executar localmente
-
-```bash
-npm install
-npm run dev
-```
-
-Abra `http://localhost:3000`.
-
-## Validar produção
+Depois execute:
 
 ```bash
 npm run build
-npm start
+git add .
+git commit -m "v1.1.4 - PagBank Plano Super Max"
+git push origin main
 ```
 
-## Publicar
-
-1. Envie os arquivos para o repositório `fiberstack-hub`.
-2. Na Vercel, clique em **Adicionar projeto**.
-3. Importe o repositório do GitHub.
-4. Mantenha as configurações automáticas e clique em **Deploy**.
-
-## Observação
-
-Antes de divulgar, atualize `siteConfig.url` após a Vercel fornecer a URL definitiva. As taxas e condições comerciais devem ser confirmadas nos sites oficiais.
-
-
-## v0.2
-- Página de oferta da Ton em `/ton`
-- Comparador direcionando para a página da Ton
-
-## v0.3
-- Componentes reutilizáveis para páginas de maquininhas
-- Cards de modelos Ton
-- Tabela comparativa responsiva
-- FAQ otimizado para decisão de compra
-- CTA final reutilizável
+A tabela do PagBank é promocional e deve continuar acompanhada do aviso para conferência de elegibilidade e vigência no regulamento oficial.
