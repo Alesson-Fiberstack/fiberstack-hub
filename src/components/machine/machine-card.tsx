@@ -8,7 +8,6 @@ export type MachineCardProps = {
   highlight: string;
   features: string[];
   href: string;
-  recommended?: boolean;
 };
 
 export function MachineCard({
@@ -17,21 +16,9 @@ export function MachineCard({
   highlight,
   features,
   href,
-  recommended = false,
 }: MachineCardProps) {
   return (
-    <Card
-      className={
-        recommended
-          ? "relative border-emerald-300 ring-2 ring-emerald-100"
-          : "relative"
-      }
-    >
-      {recommended ? (
-        <span className="absolute right-5 top-5 rounded-full bg-emerald-400/10 px-3 py-1 text-xs font-bold text-emerald-300">
-          Melhor custo-benefício
-        </span>
-      ) : null}
+    <Card className="relative">
 
       <p className="text-sm font-bold uppercase tracking-[.14em] text-emerald-300">
         {profile}

@@ -13,8 +13,8 @@ export const benefits = [
 ];
 
 export const providers = [
-  { name: "Ton", highlight: "Indicação disponível", description: "Maquininhas sem aluguel e opções para diferentes perfis de venda.", recommended: true },
-  { name: "Mercado Pago", highlight: "Em análise", description: "Ecossistema integrado com conta e soluções de pagamento.", recommended: false },
-  { name: "InfinitePay", highlight: "Em análise", description: "Soluções digitais e recebimentos para empreendedores.", recommended: false },
-  { name: "PagBank", highlight: "Em análise", description: "Maquininhas, conta digital e serviços financeiros.", recommended: false },
+  { name: "Ton", highlight: "Dados disponíveis", description: "Maquininhas sem aluguel e opções para diferentes perfis de venda.", recommended: false },
+  { name: "Mercado Pago", highlight: "Dados disponíveis", description: "Ecossistema integrado com conta e soluções de pagamento.", recommended: false },
+  { name: "InfinitePay", highlight: "Dados disponíveis", description: "Soluções digitais e recebimentos para empreendedores.", recommended: false },
+  { name: "PagBank", highlight: "Dados disponíveis", description: "Maquininhas, conta digital e serviços financeiros.", recommended: false },
 ];

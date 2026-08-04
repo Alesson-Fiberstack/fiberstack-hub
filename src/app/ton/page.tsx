@@ -74,7 +74,6 @@ const machines: MachineCardProps[] = [
       "Consulte recursos do modelo na página oficial",
     ],
     href: siteConfig.tonReferralUrl,
-    recommended: true,
   },
   {
     name: "T3",
@@ -102,7 +101,7 @@ const machines: MachineCardProps[] = [
 
 const comparisonRows: ComparisonRow[] = [
   {
-    label: "Perfil indicado",
+    label: "Perfil de uso",
     values: [
       "Vendas ocasionais",
       "Pequeno negócio",

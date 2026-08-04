@@ -475,8 +475,7 @@ export default function CalculadoraPage() {
       const fee = value * (itemRate / 100);
       return { ...item, rate: itemRate, fee, net: value - fee };
     })
-    .filter(Boolean)
-    .sort((a, b) => (a?.fee ?? 0) - (b?.fee ?? 0));
+    .filter(Boolean);
 
   const maxInstallments = providerId === "ton" && tonPlan !== "tapton" ? 21 : providerId === "mercadopago" && mpProduct === "point" ? 18 : 12;
 
@@ -750,7 +749,7 @@ export default function CalculadoraPage() {
                 {activeProvider.href && (
                   <div className="mt-6">
                     <ButtonLink href={activeProvider.href} target="_blank" className="w-full">
-                      {activeProvider.id === "ton" ? "Ver oferta da Ton" : activeProvider.id === "infinitepay" ? "Ver oferta da InfinitePay" : activeProvider.id === "mercadopago" ? "Ver oferta do Mercado Pago" : "Ver oferta do PagBank"}
+                      {activeProvider.id === "ton" ? "Consultar condições da Ton" : activeProvider.id === "infinitepay" ? "Consultar condições da InfinitePay" : activeProvider.id === "mercadopago" ? "Consultar condições do Mercado Pago" : "Consultar condições do PagBank"}
                     </ButtonLink>
                   </div>
                 )}
@@ -768,23 +767,18 @@ export default function CalculadoraPage() {
 
         <div className="mt-12">
           <h2 className="text-2xl font-bold tracking-tight">Comparação para esta venda</h2>
-          <p className="mt-2 text-slate-400">Resultados disponíveis para a mesma modalidade selecionada.</p>
+          <p className="mt-2 text-slate-400">Resultados lado a lado para a mesma modalidade selecionada, sem ranking ou recomendação.</p>
 
           <div className="mt-5 overflow-hidden rounded-2xl border border-white/10 bg-white/[.03]">
             {comparison.length > 0 ? (
-              comparison.map((item, index) =>
+              comparison.map((item) =>
                 item ? (
                   <div
                     key={item.id}
                     className="grid gap-3 border-b border-white/[.08] p-5 last:border-0 sm:grid-cols-[1fr_auto_auto_auto] sm:items-center"
                   >
                     <div>
-                      <div className="flex items-center gap-2">
-                        <p className="font-bold">{item.name}</p>
-                        {index === 0 && (
-                          <span className="rounded-full bg-emerald-400/10 px-2.5 py-1 text-xs font-bold text-emerald-300">Menor taxa</span>
-                        )}
-                      </div>
+<p className="font-bold">{item.name}</p>
                       <p className="mt-1 text-xs text-slate-500">{item.plan}</p>
                     </div>
                     <p className="text-sm"><span className="text-zinc-500">Taxa:</span> <strong>{item.rate.toFixed(2).replace(".", ",")}%</strong></p>
